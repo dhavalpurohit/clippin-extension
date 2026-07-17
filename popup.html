@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClipPIN Popup</title>
+  <style>
+    /* Reset & Base Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      width: 320px;
+      padding: 16px;
+      background-color: #0b0f19;
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .font-mono {
+      font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", Consolas, monospace;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-logo {
+      height: 26px;
+      width: auto;
+      max-width: 110px;
+      object-fit: contain;
+    }
+
+    .brand-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      object-fit: cover;
+    }
+
+    .brand-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #34d399;
+      box-shadow: 0 0 8px #34d399;
+    }
+
+    .brand-title {
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: -0.3px;
+      color: #ffffff;
+    }
+
+    .badge {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #a5b4fc;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    /* Main Card */
+    .card {
+      background: #151c2c;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 12px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: #94a3b8;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    /* PIN Display Box */
+    .pin-box {
+      background: #0b0f19;
+      border: 1px dashed rgba(99, 102, 241, 0.4);
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin-bottom: 10px;
+    }
+
+    .pin-number {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 6px;
+      color: #818cf8;
+      text-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+    }
+
+    .pin-empty {
+      color: #475569;
+      letter-spacing: 2px;
+      font-size: 20px;
+    }
+
+    /* Text Snippet Preview */
+    .snippet-box {
+      font-size: 11px;
+      color: #cbd5e1;
+      font-style: italic;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 6px;
+      padding: 6px 10px;
+      margin-bottom: 10px;
+      max-height: 48px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      word-break: break-word;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    /* Buttons */
+    .btn {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      border: none;
+      outline: none;
+    }
+
+    .btn-secondary {
+      background-color: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background-color: #334155;
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #4f46e5, #4338ca);
+      box-shadow: 0 4px 16px rgba(99, 102, 241, 0.5);
+    }
+
+    .btn-success {
+      background-color: #059669 !important;
+      color: #ffffff !important;
+      border-color: #10b981 !important;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* SVG Icon strict sizing */
+    .icon {
+      width: 15px;
+      height: 15px;
+      min-width: 15px;
+      min-height: 15px;
+      display: inline-block;
+      stroke-width: 2;
+      fill: none;
+      stroke: currentColor;
+    }
+
+    /* Footer Hint */
+    .footer-hint {
+      font-size: 10px;
+      color: #64748b;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  
+  <!-- Header -->
+  <div class="header">
+    <div class="brand">
+            <div class="brand-dot"></div>
+      <span class="brand-title">ClipPIN</span>
+
+      <img id="fallback-icon" src="icon.png" alt="ClipPIN Icon" class="brand-icon" style="display: none;" />
+      <div class="brand-dot" title="Server Connected"></div>
+    </div>
+    <span class="badge">Temp Clip</span>
+  </div>
+
+  <!-- Main Card -->
+  <div class="card">
+    <span class="card-label">Latest Generated PIN</span>
+    
+    <div class="pin-box">
+      <div id="pin-display" class="font-mono pin-number">----</div>
+    </div>
+
+    <div id="snippet-display" class="snippet-box hidden"></div>
+
+    <button id="btn-copy-pin" class="btn btn-secondary">
+      <svg class="icon" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+      </svg>
+      <span id="text-copy-pin">Copy PIN</span>
+    </button>
+  </div>
+
+  <!-- Action Button -->
+  <button id="btn-open-web" class="btn btn-primary">
+    <span>Go to Receiver Webpage</span>
+    <svg class="icon" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+    </svg>
+  </button>
+
+  <!-- Footer Notice -->
+  <div class="footer-hint" style="margin-top: 12px;">
+    Right-click any selected text & choose<br><strong style="color: #94a3b8;">"Send Selection to Temp Clipboard"</strong>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
