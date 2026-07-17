@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "ClipPIN - Temp Clipboard",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Send selected text to a temporary 10-minute clipboard with a 4-digit PIN.",
   "permissions": [
     "contextMenus",
